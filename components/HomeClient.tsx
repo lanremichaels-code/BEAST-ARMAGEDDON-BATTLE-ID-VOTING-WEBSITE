@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Option = {
@@ -151,18 +152,18 @@ export default function HomeClient() {
   return (
     <main className="site-shell">
       <header className="topbar">
-        <a className="brand" href="/">
+        <Link className="brand" href="/">
           <span className="brand-name">BEAST ARMAGEDDON AOW3</span>
-        </a>
+        </Link>
 
         <nav className="main-nav">
           <a href="#polls">Polls</a>
           <a href="#submit">Submit Battle</a>
         </nav>
 
-        <a className="admin-link" href="/admin">
+        <Link className="admin-link" href="/admin">
           Admin <span>↗</span>
-        </a>
+        </Link>
       </header>
 
       <section className="intro-row">
@@ -359,17 +360,15 @@ export default function HomeClient() {
                           <button
                             className="vote-button"
                             disabled={!!selected || voting !== null}
-                            onClick={() =>
-                              castVote(poll.id, option.id)
-                            }
+                            onClick={() => castVote(poll.id, option.id)}
                           >
                             {voting === option.id
                               ? "Voting..."
                               : selected === option.id
-                              ? "Voted ✓"
-                              : selected
-                              ? "Already voted"
-                              : "Vote"}
+                                ? "Voted ✓"
+                                : selected
+                                  ? "Already voted"
+                                  : "Vote"}
                           </button>
                         </div>
                       );

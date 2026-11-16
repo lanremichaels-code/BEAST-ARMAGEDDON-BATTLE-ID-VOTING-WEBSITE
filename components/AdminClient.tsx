@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Submission = {
@@ -32,7 +33,6 @@ export default function AdminClient() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Manual submission states
   const [manualBattleId, setManualBattleId] = useState("");
   const [manualImage, setManualImage] = useState<File | null>(null);
   const [manualBusy, setManualBusy] = useState(false);
@@ -45,7 +45,6 @@ export default function AdminClient() {
 
     if (res.ok) {
       const data = await res.json();
-
       setAuthenticated(true);
       setSubmissions(data.submissions ?? []);
       setPolls(data.polls ?? []);
@@ -60,7 +59,6 @@ export default function AdminClient() {
 
   async function login(e: React.FormEvent) {
     e.preventDefault();
-
     setBusy(true);
     setMessage("");
 
@@ -92,7 +90,6 @@ export default function AdminClient() {
     );
   }
 
-  // ADD BATTLE MANUALLY
   async function addManualSubmission(e: React.FormEvent) {
     e.preventDefault();
 
@@ -118,7 +115,6 @@ export default function AdminClient() {
 
     try {
       const formData = new FormData();
-
       formData.append("battle_id", manualBattleId.trim());
       formData.append("image", manualImage);
 
@@ -133,7 +129,6 @@ export default function AdminClient() {
         setManualMessage(data.error || "Could not add battle.");
       } else {
         setManualMessage("Battle added successfully!");
-
         setManualBattleId("");
         setManualImage(null);
 
@@ -141,9 +136,7 @@ export default function AdminClient() {
           "manual-battle-image"
         ) as HTMLInputElement | null;
 
-        if (fileInput) {
-          fileInput.value = "";
-        }
+        if (fileInput) fileInput.value = "";
 
         await loadDashboard();
       }
@@ -156,7 +149,6 @@ export default function AdminClient() {
 
   async function createPoll(e: React.FormEvent) {
     e.preventDefault();
-
     setBusy(true);
     setMessage("");
 
@@ -211,18 +203,16 @@ export default function AdminClient() {
 
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });
-
     setAuthenticated(false);
     setMessage("");
   }
 
-  // LOGIN PAGE
   if (!authenticated) {
     return (
       <main className="admin-login-page">
-        <a href="/" className="admin-back-link">
+        <Link href="/" className="admin-back-link">
           <span>←</span> Back to website
-        </a>
+        </Link>
 
         <div className="admin-login-card">
           <div className="admin-login-icon">BA</div>
@@ -264,23 +254,22 @@ export default function AdminClient() {
     );
   }
 
-  // ADMIN DASHBOARD
   return (
     <main className="admin-dashboard">
       <header className="admin-dashboard-header">
-        <a href="/" className="admin-dashboard-brand">
+        <Link href="/" className="admin-dashboard-brand">
           <span className="admin-brand-icon">BA</span>
 
           <span>
             <strong>BEAST ARMAGEDDON</strong>
             <small>COMMUNITY CONTROL</small>
           </span>
-        </a>
+        </Link>
 
         <div className="admin-header-actions">
-          <a href="/" className="admin-secondary-button">
+          <Link href="/" className="admin-secondary-button">
             View website ↗
-          </a>
+          </Link>
 
           <button className="admin-logout-button" onClick={logout}>
             Log out
@@ -289,15 +278,12 @@ export default function AdminClient() {
       </header>
 
       <div className="admin-dashboard-content">
-        {/* WELCOME */}
         <section className="admin-welcome">
           <div>
             <p className="admin-eyebrow">ADMINISTRATION</p>
-
             <h1>
               Dashboard<span>.</span>
             </h1>
-
             <p>
               Manage submissions, create polls and monitor community votes.
             </p>
@@ -309,7 +295,6 @@ export default function AdminClient() {
           </div>
         </section>
 
-        {/* STATISTICS */}
         <section className="admin-stats-grid">
           <div className="admin-stat-card">
             <span>PLAYER SUBMISSIONS</span>
@@ -330,7 +315,6 @@ export default function AdminClient() {
           </div>
         </section>
 
-        {/* PLAYER SUBMISSIONS */}
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
@@ -392,7 +376,6 @@ export default function AdminClient() {
           )}
         </section>
 
-        {/* MANUAL BATTLE SUBMISSION */}
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
@@ -406,10 +389,7 @@ export default function AdminClient() {
             <span className="admin-step-badge">ADMIN ONLY</span>
           </div>
 
-          <form
-            onSubmit={addManualSubmission}
-            className="admin-create-form"
-          >
+          <form onSubmit={addManualSubmission} className="admin-create-form">
             <div className="admin-form-group">
               <label htmlFor="manual-battle-id">Battle ID</label>
 
@@ -424,9 +404,7 @@ export default function AdminClient() {
             </div>
 
             <div className="admin-form-group">
-              <label htmlFor="manual-battle-image">
-                Battle screenshot
-              </label>
+              <label htmlFor="manual-battle-image">Battle screenshot</label>
 
               <input
                 id="manual-battle-image"
@@ -458,7 +436,6 @@ export default function AdminClient() {
           </form>
         </section>
 
-        {/* CREATE POLL */}
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
@@ -518,7 +495,6 @@ export default function AdminClient() {
           </form>
         </section>
 
-        {/* PUBLISHED POLLS */}
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
